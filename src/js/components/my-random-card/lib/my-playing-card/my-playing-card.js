@@ -242,11 +242,11 @@ customElements.define('my-playing-card',
       if (formattedSuit === 'clubs' || formattedSuit === 'spades') {
         // Set the color to black and set the path to the correct svg.
         this.#rankContainers.forEach(element => element.classList.add('black'))
-        this.#useElements.forEach(element => element.setAttribute('href', new URL(`./lib/svg/symbol-defs.svg#icon-${formattedSuit}`, import.meta.url)))
+        this.#useElements.forEach(element => element.setAttribute('href', `${spriteUrl}#icon-${formattedSuit}`))
       } else if (formattedSuit === 'hearts' || formattedSuit === 'diamonds') {
         // Set the color to black and set the path to the correct svg.
         this.#rankContainers.forEach(element => element.classList.add('red'))
-        this.#useElements.forEach(element => element.setAttribute('href', new URL(`./lib/svg/symbol-defs.svg#icon-${formattedSuit}`, import.meta.url)))
+        this.#useElements.forEach(element => element.setAttribute('href', `${spriteUrl}#icon-${formattedSuit}`))
       }
     }
 
