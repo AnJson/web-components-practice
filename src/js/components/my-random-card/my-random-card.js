@@ -9,7 +9,7 @@ template.innerHTML = `
   <style>
     :host {
       display: block;
-      height: 70vh;
+      height: 80vh;
     }
 
     #container {
