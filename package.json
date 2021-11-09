@@ -1,0 +1,27 @@
+{
+  "name": "web-components-user-list",
+  "version": "1.0.0",
+  "description": "List of users powerd by webcomponents.",
+  "type": "module",
+  "browser": "./src/js/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ./src || exit 0",
+    "lint:fix": "npx eslint ./src --fix || exit 0"
+  },
+  "contributors": [
+    "Anders Jonsson <aj224rj@student.lnu.se>"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@lnu/eslint-config": "^1.1.4",
+    "vite": "^2.6.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.lnu.se:aj224rj/web-components-user-list.git"
+  }
+}
