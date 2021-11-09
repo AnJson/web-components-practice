@@ -1,7 +1,7 @@
 {
-  "name": "web-components-user-list",
+  "name": "web-components-practice",
   "version": "1.0.0",
-  "description": "List of users powerd by webcomponents.",
+  "description": "Practice-ground for using webcomponents.",
   "type": "module",
   "browser": "./src/js/index.js",
   "scripts": {
@@ -22,6 +22,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.lnu.se:aj224rj/web-components-user-list.git"
+    "url": "https://github.com/AndersJonssonLNU/web-components-practice.git"
   }
 }
