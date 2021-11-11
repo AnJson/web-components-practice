@@ -6,7 +6,6 @@ template.innerHTML = `
   <style>
     :host {
       display: block;
-      height: 80vh;
     }
   </style>
   <my-follow-game-board></my-follow-game-board>

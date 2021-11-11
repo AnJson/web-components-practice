@@ -7,8 +7,10 @@ template.innerHTML = `
   <style>
     :host {
       display: flex;
+      padding: 2em 0;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       font-size: 10px;
       font-family: sans-serif;
     }
@@ -18,10 +20,12 @@ template.innerHTML = `
     }
 
     #board {
-      padding: 2em 0;
+      width: 35em;
+      height: 31em;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
       gap: .5em;
     }
   </style>
@@ -29,7 +33,6 @@ template.innerHTML = `
     
   </div>
   <p id="message">Play the follow-game!</p>
-  <p id="round-text"></p>
   <my-follow-game-button id="button"></my-follow-game-button>
 `
 
@@ -37,7 +40,6 @@ customElements.define('my-follow-game-board',
   class extends HTMLElement {
     #boardElement
     #messageElement
-    #roundElement
     #buttonElement
     #tilesArray
     #pattern = []
@@ -53,9 +55,8 @@ customElements.define('my-follow-game-board',
 
       this.#boardElement = this.shadowRoot.querySelector('#board')
       this.#messageElement = this.shadowRoot.querySelector('#message')
-      this.#roundElement = this.shadowRoot.querySelector('#round-text')
       this.#buttonElement = this.shadowRoot.querySelector('#button')
-      this.#tilesArray = this.#addTiles()
+      // this.#tilesArray = this.#addTiles()
     }
 
     connectedCallback () {
@@ -68,19 +69,27 @@ customElements.define('my-follow-game-board',
       })
 
       this.shadowRoot.addEventListener('start-round', () => {
-        this.#buttonElement.setAttribute('disabled', true)
-        // Signal watching stage
-        // Display Round: n
-        this.#setPattern()
-        const initialIndex = this.#tilesArray.indexOf(this.#tilesArray[this.#pattern[0]])
-        this.#signalPattern(initialIndex)
+        this.#initRound()
       })
 
-      this.#tilesArray.forEach(element => this.#boardElement.appendChild(element))
+      this.#buttonElement.setAttribute('text', `Start round ${this.#level}`)
     }
 
     isCorrectTile (id) {
-      // console.log(id === this.#pattern[this.#clickCount])
+      if (id !== this.#pattern[this.#clickCount]) {
+        this.#messageElement.textContent = 'NOOOOOOO! Try again!'
+        this.#resetGame()
+
+        setTimeout(() => {
+          this.#messageElement.textContent = 'Play the follow-game!'
+          this.#buttonElement.setAttribute('text', `Start round ${this.#level}`)
+          this.#buttonElement.removeAttribute('disabled')
+        }, 1500)
+      }
+
+      if (this.#clickCount === this.#pattern.length - 1) {
+        this.#levelUp()
+      }
     }
 
     #incrementClick () {
@@ -89,7 +98,7 @@ customElements.define('my-follow-game-board',
 
     #addTiles () {
       const array = []
-      for (let i = 0; i < 16; i++) {
+      for (let i = 0; i < 9; i++) {
         const tile = document.createElement('my-follow-game-tile')
         tile.id = i
 
@@ -99,23 +108,76 @@ customElements.define('my-follow-game-board',
       return array
     }
 
+    #addTilesToBoard () {
+      while (this.#boardElement.lastChild) {
+        this.#boardElement.removeChild(this.#boardElement.lastChild)
+      }
+
+      this.#tilesArray.forEach(element => this.#boardElement.appendChild(element))
+    }
+
     #setPattern () {
       for (let i = 0; i < this.#level; i++) {
         const index = Math.floor(Math.random() * this.#tilesArray.length)
         this.#pattern.push(index)
       }
-      console.log(this.#pattern)
     }
 
-    #signalPattern (id) {
-      this.#tilesArray[id].setAttribute('highlight', true)
+    #signalPattern (id = 0) {
+      const tilesId = this.#pattern[id]
 
-      if (id < this.#level) {
+      this.#tilesArray[tilesId].setAttribute('highlight', true)
+    
+      const nextId = id + 1
+
+      if (nextId < this.#pattern.length) {
         setTimeout(() => {
-          const nextId = this.#tilesArray.indexOf(this.#pattern[++id])
 
           this.#signalPattern(nextId)
         }, 1500)
       }
+
+      if (nextId === this.#level) {
+        setTimeout(() => {
+          this.#startPlayersTurn()
+        }, 1500)
+      }
+    }
+
+    #startPlayersTurn () {
+      this.#messageElement.textContent = 'Follow!'
+      this.#playersTurn = true
+    }
+
+    #initRound () {
+      this.#tilesArray = this.#addTiles()
+      this.#addTilesToBoard()
+
+      this.#buttonElement.setAttribute('disabled', true)
+      this.#messageElement.textContent = 'Watch!'
+      this.#clickCount = 0
+
+      this.#setPattern()
+      setTimeout(() => {
+        this.#signalPattern()
+      }, 1500)
+    }
+
+    #resetGame () {
+      this.#pattern.length = 0
+      this.#level = 1
+      this.#playersTurn = false
+    }
+
+    #levelUp () {
+      this.#level += 1
+      this.#pattern.length = 0
+      this.#playersTurn = false
+      this.#messageElement.textContent = 'CORRECT!'
+
+      setTimeout(() => {
+        this.#buttonElement.setAttribute('text', `Start round ${this.#level}`)
+        this.#buttonElement.removeAttribute('disabled')
+      }, 1000)
     }
   })

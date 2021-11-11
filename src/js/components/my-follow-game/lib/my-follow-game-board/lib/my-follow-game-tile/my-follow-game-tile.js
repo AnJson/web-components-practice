@@ -81,7 +81,7 @@ customElements.define('my-follow-game-tile',
     }
 
     colorizeTile () {
-      this.#tileElement.style.backgroundColor = `rgba(${this.#color[0]}, ${this.#color[1]}, ${this.#color[2]}, .7)`
+      this.#tileElement.style.backgroundColor = `rgba(${this.#color[0]}, ${this.#color[1]}, ${this.#color[2]}, .3)`
     }
     
     highlightTile () {
@@ -89,7 +89,7 @@ customElements.define('my-follow-game-tile',
       
       this.#tileElement.classList.toggle('bordered')
       setTimeout(() => {
-        this.#tileElement.style.backgroundColor = `rgba(${this.#color[0]}, ${this.#color[1]}, ${this.#color[2]}, .7)`
+        this.#tileElement.style.backgroundColor = `rgba(${this.#color[0]}, ${this.#color[1]}, ${this.#color[2]}, .3)`
 
         this.#tileElement.classList.toggle('bordered')
       }, 800)

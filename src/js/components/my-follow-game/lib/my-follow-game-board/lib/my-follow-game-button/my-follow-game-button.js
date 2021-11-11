@@ -33,7 +33,7 @@ template.innerHTML = `
       cursor: default;
     }
   </style>
-  <button id="button">Start round</button>
+  <button id="button">Start</button>
 `
 
 customElements.define('my-follow-game-button',
@@ -86,7 +86,7 @@ customElements.define('my-follow-game-button',
      * @returns {string[]} - Array of attributes being watched.
      */
     static get observedAttributes () {
-      return ['disabled']
+      return ['disabled', 'text']
     }
 
     /**
@@ -98,8 +98,16 @@ customElements.define('my-follow-game-button',
      */
     attributeChangedCallback (name, oldVal, newVal) {
       if (oldVal !== newVal) {
-        if (newVal !== null) {
-          this.#button.classList.add('disabled')
+        if (name === 'disabled') {
+          if (newVal !== null || newVal === true) {
+            this.#button.classList.add('disabled')
+          } else {
+            this.#button.classList.remove('disabled')
+          }
+        }
+
+        if (name === 'text') {
+          this.#button.textContent = this.getAttribute('text')
         }
       }
     }
