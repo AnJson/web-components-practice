@@ -39,6 +39,18 @@ customElements.define('my-follow-game-tile',
       this.#color = this.#setBaseColor()
     }
 
+    static get observedAttributes () {
+      return ['highlight']
+    }
+
+    attributeChangedCallback (name, oldVal, newVal) {
+        if (name === 'highlight') {
+          if (newVal) {
+            this.highlightTile()
+          }
+        }
+    }
+
     connectedCallback () {
       this.shadowRoot.addEventListener('click', () => {
         this.selectTile()
@@ -65,7 +77,6 @@ customElements.define('my-follow-game-tile',
     }
 
     selectTile () {
-      this.highlightTile()
       this.dispatchEvent(this.#selectedTileEvent)
     }
 

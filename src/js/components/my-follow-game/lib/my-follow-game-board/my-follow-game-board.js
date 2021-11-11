@@ -1,4 +1,5 @@
-import './my-follow-game-tile/'
+import './lib/my-follow-game-tile/'
+import './lib/my-follow-game-button/'
 
 const template = document.createElement('template')
 
@@ -20,15 +21,17 @@ template.innerHTML = `
   <div id="board">
     
   </div>
+  <my-follow-game-button></my-follow-game-button>
 `
 
 customElements.define('my-follow-game-board',
   class extends HTMLElement {
     #content
     #tilesArray
-    #pattern
+    #pattern = []
     #clickCount = 0
     #level = 1
+    #playersTurn = false
 
     constructor () {
       super()
@@ -42,8 +45,16 @@ customElements.define('my-follow-game-board',
 
     connectedCallback () {
       this.shadowRoot.addEventListener('selected-tile', event => {
-        this.isCorrectTile(event.detail.id)
-        this.#incrementClick()
+        if (this.#playersTurn) {
+          this.#tilesArray[event.detail.id].setAttribute('highlight', true)
+          this.isCorrectTile(event.detail.id)
+          this.#incrementClick()
+        }
+      })
+
+      this.shadowRoot.addEventListener('start-round', () => {
+        this.#setPattern()
+        this.#signalPattern()
       })
 
       this.#tilesArray.forEach(element => this.#content.appendChild(element))
@@ -67,5 +78,16 @@ customElements.define('my-follow-game-board',
       }
 
       return array
+    }
+
+    #setPattern () {
+      for (let i = 0; i < this.#level; i++) {
+        const index = Math.floor(Math.random() * this.#tilesArray.length)
+        this.#pattern.push(index)
+      }
+    }
+
+    #signalPattern () {
+      console.log(this.#pattern)
     }
   })
