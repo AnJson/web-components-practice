@@ -6,12 +6,19 @@ const template = document.createElement('template')
 template.innerHTML = `
   <style>
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       font-size: 10px;
+      font-family: sans-serif;
+    }
+
+    p {
+      font-size: 2em;
     }
 
     #board {
-      padding: 2rem 0;
+      padding: 2em 0;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -21,12 +28,17 @@ template.innerHTML = `
   <div id="board">
     
   </div>
-  <my-follow-game-button></my-follow-game-button>
+  <p id="message">Play the follow-game!</p>
+  <p id="round-text"></p>
+  <my-follow-game-button id="button"></my-follow-game-button>
 `
 
 customElements.define('my-follow-game-board',
   class extends HTMLElement {
-    #content
+    #boardElement
+    #messageElement
+    #roundElement
+    #buttonElement
     #tilesArray
     #pattern = []
     #clickCount = 0
@@ -39,7 +51,10 @@ customElements.define('my-follow-game-board',
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
 
-      this.#content = this.shadowRoot.querySelector('div')
+      this.#boardElement = this.shadowRoot.querySelector('#board')
+      this.#messageElement = this.shadowRoot.querySelector('#message')
+      this.#roundElement = this.shadowRoot.querySelector('#round-text')
+      this.#buttonElement = this.shadowRoot.querySelector('#button')
       this.#tilesArray = this.#addTiles()
     }
 
@@ -53,11 +68,14 @@ customElements.define('my-follow-game-board',
       })
 
       this.shadowRoot.addEventListener('start-round', () => {
+        this.#buttonElement.setAttribute('disabled', true)
+        // Signal watching stage
+        // Display Round: n
         this.#setPattern()
         this.#signalPattern()
       })
 
-      this.#tilesArray.forEach(element => this.#content.appendChild(element))
+      this.#tilesArray.forEach(element => this.#boardElement.appendChild(element))
     }
 
     isCorrectTile (id) {
