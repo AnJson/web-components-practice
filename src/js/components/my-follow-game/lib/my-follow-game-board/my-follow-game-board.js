@@ -72,14 +72,15 @@ customElements.define('my-follow-game-board',
         // Signal watching stage
         // Display Round: n
         this.#setPattern()
-        this.#signalPattern()
+        const initialIndex = this.#tilesArray.indexOf(this.#tilesArray[this.#pattern[0]])
+        this.#signalPattern(initialIndex)
       })
 
       this.#tilesArray.forEach(element => this.#boardElement.appendChild(element))
     }
 
     isCorrectTile (id) {
-      console.log(id === this.#pattern[this.#clickCount])
+      // console.log(id === this.#pattern[this.#clickCount])
     }
 
     #incrementClick () {
@@ -103,9 +104,18 @@ customElements.define('my-follow-game-board',
         const index = Math.floor(Math.random() * this.#tilesArray.length)
         this.#pattern.push(index)
       }
+      console.log(this.#pattern)
     }
 
-    #signalPattern () {
-      console.log(this.#pattern)
+    #signalPattern (id) {
+      this.#tilesArray[id].setAttribute('highlight', true)
+
+      if (id < this.#level) {
+        setTimeout(() => {
+          const nextId = this.#tilesArray.indexOf(this.#pattern[++id])
+
+          this.#signalPattern(nextId)
+        }, 1500)
+      }
     }
   })
