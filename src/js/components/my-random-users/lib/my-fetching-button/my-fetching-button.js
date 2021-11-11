@@ -52,10 +52,9 @@ customElements.define('my-fetching-button',
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
 
-      this.#fetchingEvent = new Event('fetch-users',
+      this.#fetchingEvent = new CustomEvent('fetch-users',
         {
           bubbles: true,
-          composed: true
         })
 
       this.#button = this.shadowRoot.querySelector('#fetching-button')

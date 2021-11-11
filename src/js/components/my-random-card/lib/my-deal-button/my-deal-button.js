@@ -68,13 +68,11 @@ customElements.define('my-deal-button',
       this.#dealEvent = new CustomEvent('deal-card',
         {
           bubbles: true,
-          composed: true
         })
 
       this.#reshuffleEvent = new CustomEvent('reshuffle',
         {
           bubbles: true,
-          composed: true
         })
 
       this.#button = this.shadowRoot.querySelector('#deal-button')
