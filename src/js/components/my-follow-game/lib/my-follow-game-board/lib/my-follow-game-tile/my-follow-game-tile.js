@@ -15,8 +15,8 @@ template.innerHTML = `
       box-sizing: border-box;
     }
 
-    .bordered {
-      border: 5px solid #000;
+    .selected {
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, .8);
     }
   </style>
   <div id="tile"></div>
@@ -87,11 +87,11 @@ customElements.define('my-follow-game-tile',
     highlightTile () {
       this.#tileElement.style.backgroundColor = `rgba(${this.#color[0]}, ${this.#color[1]}, ${this.#color[2]}, 1)`
       
-      this.#tileElement.classList.toggle('bordered')
+      this.#tileElement.classList.toggle('selected')
       setTimeout(() => {
         this.#tileElement.style.backgroundColor = `rgba(${this.#color[0]}, ${this.#color[1]}, ${this.#color[2]}, .3)`
 
-        this.#tileElement.classList.toggle('bordered')
+        this.#tileElement.classList.toggle('selected')
       }, 800)
     }
     
